@@ -11,7 +11,10 @@ class ProductSerializer(serializers.ModelSerializer):
 class StockProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockProduct
-        fields = '__all__'
+        fields = ['id', 'product', 'quantity', 'price']
+        extra_kwargs = {
+            'product': {'write_only': True},
+        }
 
 
 class StockSerializer(serializers.ModelSerializer):

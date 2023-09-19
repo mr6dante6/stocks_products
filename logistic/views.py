@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, viewsets
@@ -9,9 +10,10 @@ from .serializers import ProductSerializer, StockSerializer, StockProductSeriali
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all().order_by('id')
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 3
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['title', 'description']
     search_fields = ['title', 'description']
     filterset_class = ProductFilter
 
@@ -30,6 +32,8 @@ class StockProductViewSet(viewsets.ModelViewSet):
 
 class StockListView(ListAPIView):
     serializer_class = StockSerializer
+    pagination_class = PageNumberPagination
+    pagination_class.page_size = 3
 
     def get_queryset(self):
         search_query = self.request.query_params.get('search', '')
